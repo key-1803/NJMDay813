@@ -163,7 +163,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 630 + 70, 1195 + 140];
+      const offsets = [65, 65 + 496 + 35, 65 + (496 + 35) * 2];
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
