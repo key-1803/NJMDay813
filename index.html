@@ -32,6 +32,15 @@
       background: #222;
       margin-top: 10px;
     }
+    #photoPreviews {
+      display: flex;
+      flex-direction: row;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    #photoPreviews img {
+      border: 1px solid #ccc;
+    }
     #controls {
       display: flex;
       justify-content: center;
@@ -42,30 +51,12 @@
       font-size: 36px;
       padding: 28px 52px;
     }
-    #frameContainer {
-      position: relative;
+    #finalPreview {
       width: 244px;
-      height: 683px;
+      border: 2px solid #333;
+      margin-left: 20px;
+      display: none;
     }
-    #frameOverlay {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-    }
-    .photo-slot {
-      position: absolute;
-      width: 224px;
-      height: 166px;
-      left: 10px;
-      overflow: hidden;
-      background: white;
-    }
-    #photo1 { top: 21px; }
-    #photo2 { top: 195px; }
-    #photo3 { top: 369px; }
     canvas {
       display: none;
     }
@@ -79,12 +70,6 @@
       display: none;
       z-index: 10;
     }
-    #finalPreview {
-      margin-left: 20px;
-      border: 2px solid #333;
-      width: 244px;
-      height: auto;
-    }
   </style>
 </head>
 <body>
@@ -94,7 +79,7 @@
       <div id="countdown">3</div>
     </div>
     <canvas id="overview"></canvas>
-    <div id="photoPreviews" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+    <div id="photoPreviews">
       <img id="preview1" width="224" height="166" />
       <img id="preview2" width="224" height="166" />
       <img id="preview3" width="224" height="166" />
@@ -106,28 +91,24 @@
     </div>
   </div>
 
-  <div style="display: flex; flex-direction: column; align-items: center;">
-    <div id="frameContainer">
-      <img id="frameOverlay" src="IMG_3067.png" alt="Frame Overlay" />
-      <canvas id="photo1" class="photo-slot"></canvas>
-      <canvas id="photo2" class="photo-slot"></canvas>
-      <canvas id="photo3" class="photo-slot"></canvas>
-    </div>
-    <img id="finalPreview" src="" style="display:none; margin-top: 10px;" />
-  </div>
+  <img id="finalPreview" src="" />
 
   <script>
     const liveVideo = document.getElementById("liveview");
     const overviewCanvas = document.getElementById("overview");
     const ctxOverview = overviewCanvas.getContext("2d");
 
-    const canvas1 = document.getElementById("photo1");
-    const canvas2 = document.getElementById("photo2");
-    const canvas3 = document.getElementById("photo3");
+    const previewImages = [
+      document.getElementById("preview1"),
+      document.getElementById("preview2"),
+      document.getElementById("preview3")
+    ];
+
     const countdownEl = document.getElementById("countdown");
-    const canvases = [canvas1, canvas2, canvas3];
+    const finalPreview = document.getElementById("finalPreview");
 
     let stream;
+    let capturedCanvases = [];
 
     navigator.mediaDevices.getUserMedia({ video: true }).then((s) => {
       stream = s;
@@ -151,13 +132,14 @@
     }
 
     function capturePhoto(index) {
-      const canvas = canvases[index];
+      const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
       canvas.width = 671;
       canvas.height = 496;
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
+      capturedCanvases[index] = canvas;
 
       overviewCanvas.width = 160;
       overviewCanvas.height = 120;
@@ -168,7 +150,7 @@
       ctxOverview.drawImage(liveVideo, 0, 0, 160, 120);
       ctxOverview.restore();
 
-      document.getElementById(`preview${index + 1}`).src = canvas.toDataURL();
+      previewImages[index].src = canvas.toDataURL();
     }
 
     function generateFinalPreview() {
@@ -181,21 +163,21 @@
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
       const offsets = [65, 606, 1147];
-      canvases.forEach((c, i) => {
-        ctx.drawImage(c, 30, offsets[i], 671, 496);
+      capturedCanvases.forEach((canvas, i) => {
+        ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
 
       const frame = new Image();
       frame.src = "IMG_3067.png";
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, 731, 2048);
-        const finalImage = document.getElementById("finalPreview");
-        finalImage.src = finalCanvas.toDataURL();
-        finalImage.style.display = "block";
+        finalPreview.src = finalCanvas.toDataURL();
+        finalPreview.style.display = "block";
       };
     }
 
     document.getElementById("startBtn").addEventListener("click", async () => {
+      capturedCanvases = [];
       for (let i = 0; i < 3; i++) {
         await new Promise((resolve) => showCountdown(() => {
           capturePhoto(i);
@@ -206,18 +188,15 @@
     });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
-      canvases.forEach((c, i) => {
-        const ctx = c.getContext("2d");
-        ctx.clearRect(0, 0, c.width, c.height);
-        document.getElementById(`preview${i + 1}`).src = "";
-      });
-      document.getElementById("finalPreview").style.display = "none";
+      previewImages.forEach(img => img.src = "");
+      capturedCanvases = [];
+      finalPreview.style.display = "none";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
       const link = document.createElement("a");
       link.download = "photobooth.png";
-      link.href = document.getElementById("finalPreview").src;
+      link.href = finalPreview.src;
       link.click();
     });
   </script>
