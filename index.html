@@ -7,7 +7,7 @@
   <style>
     body {
       display: flex;
-      justify-content: center;
+      justify-content: flex-start;
       align-items: flex-start;
       gap: 20px;
       font-family: sans-serif;
@@ -55,7 +55,7 @@
       width: 244px;
       border: 2px solid #333;
       margin-left: 20px;
-      margin-top: 65px; /* Shifted slightly downward */
+      margin-top: 120px;
       display: none;
     }
     canvas {
@@ -163,7 +163,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 606, 1147];
+      const offsets = [65, 630 + 70, 1195 + 140];
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
