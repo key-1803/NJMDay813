@@ -54,12 +54,12 @@
       padding: 28px 52px;
     }
     #finalPreview {
-      width: 750px;
-      height: 562px;
+      width: 731px;
+      height: 2048px;
       border: 2px solid #333;
-      margin-left: 20px;
       display: none;
       align-self: flex-start;
+      margin-top: 0;
     }
     canvas {
       display: none;
@@ -85,23 +85,23 @@
 <body>
   <div id="leftPanel">
     <div id="mainPreviewRow">
-      <div style="position: relative; display: flex; align-items: flex-start;">
+      <div style="position: relative; display: flex; align-items: flex-start; flex-direction: column;">
         <video id="liveview" autoplay></video>
-        <div id="countdown">3</div>
+        <canvas id="overview"></canvas>
+        <div id="photoPreviews">
+          <img id="preview1" width="224" height="166" />
+          <img id="preview2" width="224" height="166" />
+          <img id="preview3" width="224" height="166" />
+        </div>
+        <div id="controls">
+          <button id="startBtn">Start</button>
+          <button id="retakeBtn">Retake</button>
+          <button id="downloadBtn">Download</button>
+        </div>
       </div>
       <img id="finalPreview" src="" />
     </div>
-    <canvas id="overview"></canvas>
-    <div id="photoPreviews">
-      <img id="preview1" width="224" height="166" />
-      <img id="preview2" width="224" height="166" />
-      <img id="preview3" width="224" height="166" />
-    </div>
-    <div id="controls">
-      <button id="startBtn">Start</button>
-      <button id="retakeBtn">Retake</button>
-      <button id="downloadBtn">Download</button>
-    </div>
+    <div id="countdown">3</div>
   </div>
 
   <script>
@@ -173,7 +173,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 682, 1299];
+      const offsets = [65, 627, 1193]; // adjusted to match overlay's holes
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
