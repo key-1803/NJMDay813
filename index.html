@@ -169,17 +169,17 @@
 
     function generateFinalPreview() {
   const finalCanvas = document.createElement("canvas");
-  finalCanvas.width = 731;
-  finalCanvas.height = 2048;
+  finalCanvas.width = 1420;
+  finalCanvas.height = 3976;
   const ctx = finalCanvas.getContext("2d");
 
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-  const photoWidth = 596;  // scaled width
-  const photoHeight = 469; // scaled height
+  const photoWidth = 1282;  // scaled width
+  const photoHeight = 1009; // scaled height
   const xOffset = (finalCanvas.width - photoWidth) / 2;
-  const offsets = [108, 680, 1252];
+  const offsets = [108, 1220, 2332];
 
   capturedCanvases.forEach((canvas, i) => {
     ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
