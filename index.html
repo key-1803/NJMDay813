@@ -22,8 +22,8 @@
     }
     #liveview {
       transform: scaleX(-1);
-      width: 750px;
-      height: 562px;
+      width: 780px;
+      height: 585px;
       background: #000;
       position: relative;
     }
@@ -54,8 +54,8 @@
       padding: 28px 52px;
     }
     #finalPreview {
-      width: 731px;
-      height: 2048px;
+      width: 365px;
+      height: 1024px;
       border: 2px solid #333;
       display: none;
       align-self: flex-start;
@@ -173,7 +173,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 627, 1193]; // adjusted to match overlay's holes
+      const offsets = [65, 627, 1193]; // jarak antar foto sudah disesuaikan
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
