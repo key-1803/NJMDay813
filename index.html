@@ -55,7 +55,7 @@
       width: 244px;
       border: 2px solid #333;
       margin-left: 20px;
-      margin-top: 180px;
+      margin-top: 260px;
       display: none;
     }
     canvas {
@@ -163,13 +163,13 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 631, 1197];
+      const offsets = [65, 627, 1189]; // jarak antar foto = 496 + 66
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
 
       const frame = new Image();
-      frame.src = "IMG_3067.png";
+      frame.src = "IMG_3083.png";
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, 731, 2048);
         finalPreview.src = finalCanvas.toDataURL();
