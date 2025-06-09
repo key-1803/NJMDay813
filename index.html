@@ -34,10 +34,10 @@
     }
 
     #liveview {
-      width: 700px;
-      height: 525px;
+      width: 640px;
+      height: 480px;
       background: #000;
-      transform: scaleX(-1); /* Mirror camera preview */
+      transform: scaleX(-1); /* Mirror camera only */
     }
 
     #countdown {
@@ -60,10 +60,10 @@
     }
 
     #photoPreviews img {
-      width: 180px;
-      height: 133px;
+      width: 160px;
+      height: 120px;
       border: 1px solid #ccc;
-      transform: scaleX(-1); /* Mirror thumbnails */
+      transform: scaleX(-1); /* Mirror thumbnails only */
     }
 
     #controls {
@@ -74,22 +74,22 @@
     }
 
     #controls button {
-      font-size: 28px;
-      padding: 20px 40px;
+      font-size: 24px;
+      padding: 16px 32px;
     }
 
     #finalPreview {
-      width: 300px;
+      width: 280px;
       height: auto;
       border: 2px solid #333;
       display: none;
       align-self: flex-start;
       margin-top: 0;
-      transform: scaleX(-1); /* Mirror final preview */
+      transform: scaleX(-1); /* Mirror final preview only */
     }
 
     #decorationImage {
-      height: 350px; /* Smaller size */
+      height: 300px; /* Smaller image */
       margin-top: 0;
     }
 
@@ -164,7 +164,7 @@
       canvas.width = 1288;
       canvas.height = 1015;
 
-      // Flip (mirror) the image
+      // Mirror the photo
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
