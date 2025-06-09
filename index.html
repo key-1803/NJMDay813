@@ -148,8 +148,8 @@
     function capturePhoto(index) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = 1420;
-      canvas.height = 3976;
+      canvas.width = 1282;
+      canvas.height = 1009;
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
@@ -169,26 +169,30 @@
 
     function generateFinalPreview() {
   const finalCanvas = document.createElement("canvas");
-  finalCanvas.width = 1282;
-  finalCanvas.height = 1009;
+  finalCanvas.width = 1420;
+  finalCanvas.height = 3976;
   const ctx = finalCanvas.getContext("2d");
 
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-  const photoWidth = 1420;  // scaled width
-  const photoHeight = 3976; // scaled height
-  const xOffset = (finalCanvas.width - photoWidth) / 2;
-  const offsets = [108, 1220, 2332];
+  const photoWidth = 1282;
+  const photoHeight = 1009;
+  const xOffset = (finalCanvas.width - photoWidth) / 2; // Centered horizontally
+  const offsets = [
+    108,                                // First photo from top
+    108 + 1009 + 103,                   // Second photo
+    108 + 1009 + 103 + 1009 + 103       // Third photo
+  ];
 
   capturedCanvases.forEach((canvas, i) => {
     ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
   });
 
   const frame = new Image();
-  frame.src = "IMG_3088.png";
+  frame.src = "IMG_3088.png"; // Make sure this is the 1420x3976 version
   frame.onload = () => {
-    ctx.drawImage(frame, 0, 0, 731, 2048);
+    ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
     finalPreview.src = finalCanvas.toDataURL();
     finalPreview.style.display = "block";
   };
@@ -220,3 +224,4 @@
   </script>
 </body>
 </html>
+
