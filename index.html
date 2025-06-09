@@ -168,52 +168,44 @@
     }
 
     function generateFinalPreview() {
-      const finalCanvas = document.createElement("canvas");
-      finalCanvas.width = 1420;
-      finalCanvas.height = 3976;
-      const ctx = finalCanvas.getContext("2d");
+  const finalCanvas = document.createElement("canvas");
+  finalCanvas.width = 1420;
+  finalCanvas.height = 3976;
+  const ctx = finalCanvas.getContext("2d");
 
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const photoWidth = 1300;
-      const photoHeight = 1020;
-      const xOffset = (finalCanvas.width - photoWidth) / 2;
-      const offsets = [
-        108,
-        100 + photoHeight + 100,
-        98 + photoHeight + 95 + photoHeight + 100
-      ];
+  const photoWidth = 1300;
+  const photoHeight = 1020;
+  const xOffset = (finalCanvas.width - photoWidth) / 2;
+  const offsets = [
+    108,
+    100 + photoHeight + 100,
+    98 + photoHeight + 95 + photoHeight + 100
+  ];
 
-      capturedCanvases.forEach((canvas, i) => {
-        ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
-      });
+  capturedCanvases.forEach((canvas, i) => {
+    ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
+  });
 
-      const frame = new Image();
-      frame.src = "IMG_3088.png";
-      frame.onload = () => {
-        ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
-        finalPreview.src = finalCanvas.toDataURL();
-        finalPreview.style.display = "block";
-      };
-    }
+  const deco = new Image();
+  deco.src = "IMG_3090.png"; 
+  deco.onload = () => {
+    const targetHeight = finalCanvas.height;
+    const scale = targetHeight / deco.height;
+    const decoWidth = deco.width * scale;
+    ctx.drawImage(deco, finalCanvas.width - decoWidth, 0, decoWidth, targetHeight);
 
-    document.getElementById("startBtn").addEventListener("click", async () => {
-      capturedCanvases = [];
-      for (let i = 0; i < 3; i++) {
-        await new Promise((resolve) => showCountdown(() => {
-          capturePhoto(i);
-          resolve();
-        }));
-      }
-      generateFinalPreview();
-    });
-
-    document.getElementById("retakeBtn").addEventListener("click", () => {
-      previewImages.forEach(img => img.src = "");
-      capturedCanvases = [];
-      finalPreview.style.display = "none";
-    });
+    const frame = new Image();
+    frame.src = "IMG_3088.png";
+    frame.onload = () => {
+      ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
+      finalPreview.src = finalCanvas.toDataURL();
+      finalPreview.style.display = "block";
+    };
+  };
+}
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
       const link = document.createElement("a");
