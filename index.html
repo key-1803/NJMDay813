@@ -176,9 +176,9 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [40, 1116, 2191]; // Adjusted based on photo height + spacing
+      const offsets = [108, 108 + 1009 + 103, 108 + 1009 + 103 + 1009 + 103];
       capturedCanvases.forEach((canvas, i) => {
-        ctx.drawImage(canvas, -275, offsets[i], 1282, 1009);
+        ctx.drawImage(canvas, (finalCanvas.width - 1282) / 2, offsets[i], 1282, 1009);
       });
 
       const frame = new Image();
