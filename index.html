@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Photobooth 3-Cut</title>
   <style>
     body {
@@ -18,7 +18,13 @@
     #leftPanel {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
+    }
+    #mainPreviewRow {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
     }
     #liveview {
       transform: scaleX(-1);
@@ -64,37 +70,35 @@
       font-size: 36px;
       padding: 28px 52px;
     }
-    canvas {
+    #finalPreview {
+      width: 355px;
+      height: auto;
+      border: 2px solid #333;
       display: none;
+      align-self: flex-start;
+      margin-top: 0;
     }
-    #mainPreviewRow {
+    #liveAndOverlay {
       display: flex;
       flex-direction: row;
       align-items: flex-start;
       gap: 20px;
     }
-    #finalGroup {
-      display: none;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    #finalPreview {
-      width: 355px;
-      border: 2px solid #333;
-    }
-    #sideDecoration {
-      height: 3976px;
+    #decorationImage {
+      height: 637px; /* Same height as liveview for alignment */
     }
   </style>
 </head>
 <body>
   <div id="leftPanel">
     <div id="mainPreviewRow">
-      <div style="position: relative; display: flex; align-items: flex-start; flex-direction: column;">
-        <div style="position: relative;">
-          <video id="liveview" autoplay></video>
-          <div id="countdown">3</div>
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <div id="liveAndOverlay">
+          <div style="position: relative;">
+            <video id="liveview" autoplay></video>
+            <div id="countdown">3</div>
+          </div>
+          <img id="decorationImage" src="IMG_3090.png" />
         </div>
         <canvas id="overview"></canvas>
         <div id="photoPreviews">
@@ -108,10 +112,7 @@
           <button id="downloadBtn">Download</button>
         </div>
       </div>
-      <div id="finalGroup">
-        <img id="finalPreview" src="" />
-        <img id="sideDecoration" src="IMG_3090.png" />
-      </div>
+      <img id="finalPreview" src="" />
     </div>
   </div>
 
@@ -202,7 +203,7 @@
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         finalPreview.src = finalCanvas.toDataURL();
-        document.getElementById("finalGroup").style.display = "flex";
+        finalPreview.style.display = "block";
       };
     }
 
@@ -220,7 +221,7 @@
     document.getElementById("retakeBtn").addEventListener("click", () => {
       previewImages.forEach(img => img.src = "");
       capturedCanvases = [];
-      document.getElementById("finalGroup").style.display = "none";
+      finalPreview.style.display = "none";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
