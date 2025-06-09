@@ -65,8 +65,8 @@
       padding: 28px 52px;
     }
     #finalPreview {
-      width: 365px;
-      height: 1024px;
+      width: 355px;
+      height: auto;
       border: 2px solid #333;
       display: none;
       align-self: flex-start;
@@ -168,35 +168,35 @@
     }
 
     function generateFinalPreview() {
-  const finalCanvas = document.createElement("canvas");
-  finalCanvas.width = 1420;
-  finalCanvas.height = 3976;
-  const ctx = finalCanvas.getContext("2d");
+      const finalCanvas = document.createElement("canvas");
+      finalCanvas.width = 1420;
+      finalCanvas.height = 3976;
+      const ctx = finalCanvas.getContext("2d");
 
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-  const photoWidth = 1282;
-  const photoHeight = 1009;
-  const xOffset = (finalCanvas.width - photoWidth) / 2; // Centered horizontally
-  const offsets = [
-    108,                                // First photo from top
-    108 + 1009 + 103,                   // Second photo
-    108 + 1009 + 103 + 1009 + 103       // Third photo
-  ];
+      const photoWidth = 1282;
+      const photoHeight = 1009;
+      const xOffset = (finalCanvas.width - photoWidth) / 2;
+      const offsets = [
+        108,
+        108 + photoHeight + 103,
+        108 + photoHeight + 103 + photoHeight + 103
+      ];
 
-  capturedCanvases.forEach((canvas, i) => {
-    ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
-  });
+      capturedCanvases.forEach((canvas, i) => {
+        ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
+      });
 
-  const frame = new Image();
-  frame.src = "IMG_3088.png"; // Make sure this is the 1420x3976 version
-  frame.onload = () => {
-    ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
-    finalPreview.src = finalCanvas.toDataURL();
-    finalPreview.style.display = "block";
-  };
-}
+      const frame = new Image();
+      frame.src = "IMG_3088.png";
+      frame.onload = () => {
+        ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
+        finalPreview.src = finalCanvas.toDataURL();
+        finalPreview.style.display = "block";
+      };
+    }
 
     document.getElementById("startBtn").addEventListener("click", async () => {
       capturedCanvases = [];
@@ -224,4 +224,3 @@
   </script>
 </body>
 </html>
-
