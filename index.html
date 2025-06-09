@@ -148,8 +148,8 @@
     function capturePhoto(index) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = 1282;
-      canvas.height = 1009;
+      canvas.width = 1420;
+      canvas.height = 3976;
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
@@ -188,7 +188,7 @@
   const frame = new Image();
   frame.src = "IMG_3088.png";
   frame.onload = () => {
-    ctx.drawImage(frame, 0, 0, 1420, 3976);
+    ctx.drawImage(frame, 0, 0, 731, 2048);
     finalPreview.src = finalCanvas.toDataURL();
     finalPreview.style.display = "block";
   };
