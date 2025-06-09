@@ -22,8 +22,8 @@
     }
     #liveview {
       transform: scaleX(-1);
-      width: 780px;
-      height: 585px;
+      width: 800px;
+      height: 600px;
       background: #000;
       position: relative;
     }
@@ -176,7 +176,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 631, 1229]; // Adjusted offsets: 66px between 2 & 3
+      const offsets = [65, 631, 1227]; // Adjusted spacing: 70px and 66px gaps
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
