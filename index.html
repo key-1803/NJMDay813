@@ -168,27 +168,31 @@
     }
 
     function generateFinalPreview() {
-      const finalCanvas = document.createElement("canvas");
-      finalCanvas.width = 731;
-      finalCanvas.height = 2048;
-      const ctx = finalCanvas.getContext("2d");
+  const finalCanvas = document.createElement("canvas");
+  finalCanvas.width = 731;
+  finalCanvas.height = 2048;
+  const ctx = finalCanvas.getContext("2d");
 
-      ctx.fillStyle = "white";
-      ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [108, 108 + 1009 + 103, 108 + 1009 + 103 + 1009 + 103];
-      capturedCanvases.forEach((canvas, i) => {
-        ctx.drawImage(canvas, (finalCanvas.width - 1282) / 2, offsets[i], 1282, 1009);
-      });
+  const photoWidth = 596;  // scaled width
+  const photoHeight = 469; // scaled height
+  const xOffset = (finalCanvas.width - photoWidth) / 2;
+  const offsets = [108, 680, 1252];
 
-      const frame = new Image();
-      frame.src = "IMG_3088.png";
-      frame.onload = () => {
-        ctx.drawImage(frame, 0, 0, 731, 2048);
-        finalPreview.src = finalCanvas.toDataURL();
-        finalPreview.style.display = "block";
-      };
-    }
+  capturedCanvases.forEach((canvas, i) => {
+    ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
+  });
+
+  const frame = new Image();
+  frame.src = "IMG_3088.png";
+  frame.onload = () => {
+    ctx.drawImage(frame, 0, 0, 731, 2048);
+    finalPreview.src = finalCanvas.toDataURL();
+    finalPreview.style.display = "block";
+  };
+}
 
     document.getElementById("startBtn").addEventListener("click", async () => {
       capturedCanvases = [];
