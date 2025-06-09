@@ -56,8 +56,9 @@
       width: 244px;
       border: 2px solid #333;
       margin-left: 20px;
-      margin-top: 260px;
+      margin-top: 0;
       display: none;
+      align-self: flex-start;
     }
     canvas {
       display: none;
@@ -164,7 +165,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [54, 637, 1232]; // Adjusted spacing between photos
+      const offsets = [54, 670, 1282]; // Adjusted spacing to match IMG_3085.png
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
