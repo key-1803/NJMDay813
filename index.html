@@ -27,10 +27,20 @@
       background: #000;
       position: relative;
     }
+    #overlayFrame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 850px;
+      height: 637px;
+      pointer-events: none;
+      z-index: 5;
+    }
     #countdown {
       position: absolute;
       font-size: 100px;
       color: white;
+      font-weight: bold;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -89,6 +99,7 @@
       <div style="position: relative; display: flex; align-items: flex-start; flex-direction: column;">
         <div style="position: relative;">
           <video id="liveview" autoplay></video>
+          <img id="overlayFrame" src="IMG_3088.png" />
           <div id="countdown">3</div>
         </div>
         <canvas id="overview"></canvas>
@@ -151,7 +162,7 @@
       canvas.width = 1288;
       canvas.height = 1015;
       ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
+      ctx.scale(-1, 1); // mirror video only
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
       capturedCanvases[index] = canvas;
 
