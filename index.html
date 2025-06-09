@@ -2,37 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Photobooth 3-Cut</title>
   <style>
     body {
       display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 20px;
+      flex-direction: column;
+      align-items: center;
       font-family: sans-serif;
       margin: 20px;
       background: url('bg@4x.png') no-repeat center center fixed;
       background-size: cover;
     }
-    #leftPanel {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
+
     #mainPreviewRow {
       display: flex;
-      flex-direction: row;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
+
+    #contentRow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
       gap: 20px;
     }
-    #liveview {
-      transform: scaleX(-1);
-      width: 850px;
-      height: 637px;
-      background: #000;
+
+    #liveContainer {
       position: relative;
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
+    #liveview {
+      width: 100%;
+      max-width: 850px;
+      height: auto;
+      background: #000;
+    }
+
     #countdown {
       position: absolute;
       font-size: 100px;
@@ -44,75 +57,133 @@
       z-index: 10;
       pointer-events: none;
     }
-    #overview {
-      transform: scaleX(-1);
-      width: 160px;
-      height: 120px;
-      background: #222;
-      margin-top: 10px;
-    }
+
     #photoPreviews {
       display: flex;
       flex-direction: row;
       gap: 10px;
       margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
+
     #photoPreviews img {
+      width: 30vw;
+      max-width: 224px;
+      height: auto;
       border: 1px solid #ccc;
     }
+
     #controls {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 10px;
       margin-top: 20px;
     }
+
     #controls button {
-      font-size: 36px;
-      padding: 28px 52px;
+      font-size: 5vw;
+      padding: 15px 25px;
     }
+
+    #overview {
+      display: none;
+    }
+
     #finalPreview {
-      width: 355px;
+      width: 100%;
+      max-width: 355px;
       height: auto;
       border: 2px solid #333;
       display: none;
-      align-self: flex-start;
-      margin-top: 0;
     }
-    #liveAndOverlay {
+
+    #decorationWrapper {
       display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 20px;
+      justify-content: center;
+      width: 100%;
     }
+
     #decorationImage {
-      height: 637px; /* Same height as liveview for alignment */
+      width: 90vw;
+      max-width: 300px;
+      height: auto;
+    }
+
+    canvas {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+
+      #mainPreviewRow {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+
+      #contentRow {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+
+      #controls button {
+        font-size: 36px;
+        padding: 28px 52px;
+      }
+
+      #photoPreviews img {
+        width: 224px;
+        height: 166px;
+      }
+
+      #overview {
+        display: block;
+        width: 160px;
+        height: 120px;
+        background: #222;
+        margin-top: 10px;
+      }
+
+      #decorationWrapper {
+        width: auto;
+      }
+
+      #decorationImage {
+        height: 637px;
+        width: auto;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="leftPanel">
-    <div id="mainPreviewRow">
-      <div style="display: flex; flex-direction: column; align-items: flex-start;">
-        <div id="liveAndOverlay">
-          <div style="position: relative;">
-            <video id="liveview" autoplay></video>
-            <div id="countdown">3</div>
-          </div>
-          <img id="decorationImage" src="IMG_3090.png" />
-        </div>
-        <canvas id="overview"></canvas>
-        <div id="photoPreviews">
-          <img id="preview1" width="224" height="166" />
-          <img id="preview2" width="224" height="166" />
-          <img id="preview3" width="224" height="166" />
-        </div>
-        <div id="controls">
-          <button id="startBtn">Start</button>
-          <button id="retakeBtn">Retake</button>
-          <button id="downloadBtn">Download</button>
-        </div>
+  <div id="mainPreviewRow">
+    <div id="contentRow">
+      <div id="liveContainer">
+        <video id="liveview" autoplay></video>
+        <div id="countdown">3</div>
+      </div>
+      <canvas id="overview"></canvas>
+      <div id="photoPreviews">
+        <img id="preview1" />
+        <img id="preview2" />
+        <img id="preview3" />
+      </div>
+      <div id="controls">
+        <button id="startBtn">Start</button>
+        <button id="retakeBtn">Retake</button>
+        <button id="downloadBtn">Download</button>
       </div>
       <img id="finalPreview" src="" />
+    </div>
+    <div id="decorationWrapper">
+      <img id="decorationImage" src="IMG_3090.png" alt="Decoration" />
     </div>
   </div>
 
@@ -159,8 +230,6 @@
       const ctx = canvas.getContext("2d");
       canvas.width = 1288;
       canvas.height = 1015;
-      ctx.translate(canvas.width, 0);
-      ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
       capturedCanvases[index] = canvas;
 
@@ -168,8 +237,6 @@
       overviewCanvas.height = 120;
       ctxOverview.save();
       ctxOverview.clearRect(0, 0, 160, 120);
-      ctxOverview.translate(160, 0);
-      ctxOverview.scale(-1, 1);
       ctxOverview.drawImage(liveVideo, 0, 0, 160, 120);
       ctxOverview.restore();
 
