@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Photobooth 3-Cut with Firebase Upload</title>
+  <title>Photobooth 3-Cut</title>
   <style>
     body {
       display: flex;
@@ -117,22 +117,6 @@
     </div>
   </div>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.appspot.com",
-      messagingSenderId: "XXXXXXX",
-      appId: "APP_ID"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const storage = firebase.storage();
-  </script>
-
   <script>
     const liveVideo = document.getElementById("liveview");
     const overviewCanvas = document.getElementById("overview");
@@ -217,31 +201,11 @@
 
       const frame = new Image();
       frame.src = "IMG_3088.png";
-      frame.onload = async () => {
+      frame.onload = () => {
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         const finalDataURL = finalCanvas.toDataURL();
         frameDisplay.src = finalDataURL;
-
-        // Upload ke Firebase
-        const downloadURL = await uploadToFirebase(finalDataURL);
-        console.log("Uploaded to:", downloadURL);
       };
-    }
-
-    function uploadToFirebase(dataURL) {
-      const blob = dataURItoBlob(dataURL);
-      const fileName = `photobooth_${Date.now()}.png`;
-      const storageRef = storage.ref().child(`photobooth/${fileName}`);
-      return storageRef.put(blob).then(() => storageRef.getDownloadURL());
-    }
-
-    function dataURItoBlob(dataURI) {
-      const byteString = atob(dataURI.split(',')[1]);
-      const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let i = 0; i < byteString.length; i++) ia[i] = byteString.charCodeAt(i);
-      return new Blob([ab], { type: mimeString });
     }
 
     document.getElementById("startBtn").addEventListener("click", async () => {
