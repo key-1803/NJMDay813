@@ -169,8 +169,8 @@
 
     function generateFinalPreview() {
   const finalCanvas = document.createElement("canvas");
-  finalCanvas.width = 1420;
-  finalCanvas.height = 3976;
+  finalCanvas.width = 1282;
+  finalCanvas.height = 1009;
   const ctx = finalCanvas.getContext("2d");
 
   ctx.fillStyle = "white";
@@ -188,7 +188,7 @@
   const frame = new Image();
   frame.src = "IMG_3088.png";
   frame.onload = () => {
-    ctx.drawImage(frame, 0, 0, 731, 2048);
+    ctx.drawImage(frame, 0, 0, 1420, 3976);
     finalPreview.src = finalCanvas.toDataURL();
     finalPreview.style.display = "block";
   };
