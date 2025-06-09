@@ -7,8 +7,10 @@
   <style>
     body {
       display: flex;
-      font-family: sans-serif;
+      justify-content: flex-start;
+      align-items: flex-start;
       gap: 20px;
+      font-family: sans-serif;
       margin: 20px;
       background: url('bg@4x.png') no-repeat center center fixed;
       background-size: cover;
@@ -18,22 +20,23 @@
       flex-direction: column;
       align-items: center;
     }
-    #mainPreviewRow {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 20px;
-    }
-    #videoContainer {
+    #liveviewContainer {
       position: relative;
       width: 850px;
       height: 637px;
     }
     #liveview {
+      transform: scaleX(-1);
       width: 100%;
       height: 100%;
-      transform: scaleX(-1);
       background: #000;
+    }
+    #sticker {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      width: 120px;
+      height: auto;
     }
     #countdown {
       position: absolute;
@@ -43,21 +46,15 @@
       left: 50%;
       transform: translate(-50%, -50%);
       display: none;
-      z-index: 5;
+      z-index: 10;
       pointer-events: none;
     }
-    #sticker {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      width: 100px;
-      height: auto;
-      z-index: 4;
-      pointer-events: none;
-    }
-    #overlayPreview {
-      width: 355px;
-      height: auto;
+    #overview {
+      transform: scaleX(-1);
+      width: 160px;
+      height: 120px;
+      background: #222;
+      margin-top: 10px;
     }
     #photoPreviews {
       display: flex;
@@ -78,26 +75,33 @@
       font-size: 36px;
       padding: 28px 52px;
     }
-    #finalPreview {
-      width: 355px;
-      border: 2px solid #333;
-      display: none;
-      margin-top: 20px;
-    }
     canvas {
       display: none;
+    }
+    #mainPreviewRow {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    #frameDisplay {
+      width: 355px;
+      height: auto;
+      border: 2px solid #333;
+      align-self: flex-start;
     }
   </style>
 </head>
 <body>
   <div id="leftPanel">
     <div id="mainPreviewRow">
-      <div>
-        <div id="videoContainer">
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <div id="liveviewContainer">
           <video id="liveview" autoplay></video>
           <div id="countdown">3</div>
           <img id="sticker" src="IMG_3090.png" />
         </div>
+        <canvas id="overview"></canvas>
         <div id="photoPreviews">
           <img id="preview1" width="224" height="166" />
           <img id="preview2" width="224" height="166" />
@@ -109,20 +113,24 @@
           <button id="downloadBtn">Download</button>
         </div>
       </div>
-      <img id="overlayPreview" src="IMG_3088.png" />
+      <img id="frameDisplay" src="IMG_3088.png" />
     </div>
-    <img id="finalPreview" src="" />
   </div>
 
   <script>
     const liveVideo = document.getElementById("liveview");
+    const overviewCanvas = document.getElementById("overview");
+    const ctxOverview = overviewCanvas.getContext("2d");
+
     const previewImages = [
       document.getElementById("preview1"),
       document.getElementById("preview2"),
       document.getElementById("preview3")
     ];
+
     const countdownEl = document.getElementById("countdown");
-    const finalPreview = document.getElementById("finalPreview");
+    const frameDisplay = document.getElementById("frameDisplay");
+
     let stream;
     let capturedCanvases = [];
 
@@ -156,6 +164,16 @@
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
       capturedCanvases[index] = canvas;
+
+      overviewCanvas.width = 160;
+      overviewCanvas.height = 120;
+      ctxOverview.save();
+      ctxOverview.clearRect(0, 0, 160, 120);
+      ctxOverview.translate(160, 0);
+      ctxOverview.scale(-1, 1);
+      ctxOverview.drawImage(liveVideo, 0, 0, 160, 120);
+      ctxOverview.restore();
+
       previewImages[index].src = canvas.toDataURL();
     }
 
@@ -185,8 +203,8 @@
       frame.src = "IMG_3088.png";
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
-        finalPreview.src = finalCanvas.toDataURL();
-        finalPreview.style.display = "block";
+        const finalDataURL = finalCanvas.toDataURL();
+        frameDisplay.src = finalDataURL;
       };
     }
 
@@ -204,13 +222,13 @@
     document.getElementById("retakeBtn").addEventListener("click", () => {
       previewImages.forEach(img => img.src = "");
       capturedCanvases = [];
-      finalPreview.style.display = "none";
+      frameDisplay.src = "IMG_3088.png";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
       const link = document.createElement("a");
       link.download = "photobooth.png";
-      link.href = finalPreview.src;
+      link.href = frameDisplay.src;
       link.click();
     });
   </script>
