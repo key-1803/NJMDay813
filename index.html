@@ -12,7 +12,8 @@
       gap: 20px;
       font-family: sans-serif;
       margin: 20px;
-      background-color: #f3c2da;
+      background: url('bg@4x.png') no-repeat center center fixed;
+      background-size: cover;
     }
     #leftPanel {
       display: flex;
@@ -77,8 +78,9 @@
 </head>
 <body>
   <div id="leftPanel">
-    <div style="position: relative;">
+    <div style="position: relative; display: flex; align-items: flex-start;">
       <video id="liveview" autoplay></video>
+      <img id="finalPreview" src="" />
       <div id="countdown">3</div>
     </div>
     <canvas id="overview"></canvas>
@@ -93,8 +95,6 @@
       <button id="downloadBtn">Download</button>
     </div>
   </div>
-
-  <img id="finalPreview" src="" />
 
   <script>
     const liveVideo = document.getElementById("liveview");
@@ -165,7 +165,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [54, 670, 1282]; // Adjusted spacing to match IMG_3085.png
+      const offsets = [54, 670, 1282];
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
