@@ -12,6 +12,7 @@
       gap: 20px;
       font-family: sans-serif;
       margin: 20px;
+      background-color: #f3c2da;
     }
     #leftPanel {
       display: flex;
@@ -163,13 +164,13 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 627, 1189]; // jarak antar foto = 496 + 66
+      const offsets = [54, 637, 1232]; // Adjusted spacing between photos
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
 
       const frame = new Image();
-      frame.src = "IMG_3083.png";
+      frame.src = "IMG_3085.png";
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, 731, 2048);
         finalPreview.src = finalCanvas.toDataURL();
