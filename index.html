@@ -22,8 +22,8 @@
     }
     #liveview {
       transform: scaleX(-1);
-      width: 820px;
-      height: 615px;
+      width: 850px;
+      height: 637px;
       background: #000;
       position: relative;
     }
@@ -48,8 +48,8 @@
     #photoPreviews {
       display: flex;
       flex-direction: row;
-      gap: 0px;
-      margin-top: 0px;
+      gap: 10px;
+      margin-top: 10px;
     }
     #photoPreviews img {
       border: 1px solid #ccc;
@@ -67,7 +67,7 @@
     #finalPreview {
       width: 365px;
       height: 1024px;
-      border: 2px solid #000;
+      border: 2px solid #333;
       display: none;
       align-self: flex-start;
       margin-top: 0;
@@ -176,13 +176,13 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [65, 631, 1193]; // 65 (top), +566, +562
+      const offsets = [70, 636, 1198]; // 70px, 566px gap, 562px gap
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
 
       const frame = new Image();
-      frame.src = "IMG_3085.png";
+      frame.src = "IMG_3088.png";
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, 731, 2048);
         finalPreview.src = finalCanvas.toDataURL();
