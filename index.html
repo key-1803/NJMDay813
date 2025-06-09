@@ -148,8 +148,8 @@
     function capturePhoto(index) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = 671;
-      canvas.height = 496;
+      canvas.width = 1282;
+      canvas.height = 1009;
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
@@ -176,9 +176,9 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [70, 636, 1198]; // 70px, 566px gap, 562px gap
+      const offsets = [40, 1116, 2191]; // Adjusted based on photo height + spacing
       capturedCanvases.forEach((canvas, i) => {
-        ctx.drawImage(canvas, 30, offsets[i], 671, 496);
+        ctx.drawImage(canvas, -275, offsets[i], 1282, 1009);
       });
 
       const frame = new Image();
