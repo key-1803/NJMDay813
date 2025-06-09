@@ -22,8 +22,8 @@
     }
     #liveview {
       transform: scaleX(-1);
-      width: 640px;
-      height: 480px;
+      width: 750px;
+      height: 562px;
       background: #000;
       position: relative;
     }
@@ -54,8 +54,8 @@
       padding: 28px 52px;
     }
     #finalPreview {
-      width: 365px;
-      height: auto;
+      width: 750px;
+      height: 562px;
       border: 2px solid #333;
       margin-left: 20px;
       display: none;
@@ -173,7 +173,7 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const offsets = [62, 676, 1290];
+      const offsets = [65, 682, 1299];
       capturedCanvases.forEach((canvas, i) => {
         ctx.drawImage(canvas, 30, offsets[i], 671, 496);
       });
@@ -213,4 +213,3 @@
   </script>
 </body>
 </html>
-
