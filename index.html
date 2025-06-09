@@ -148,8 +148,8 @@
     function capturePhoto(index) {
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d");
-      canvas.width = 1282;
-      canvas.height = 1009;
+      canvas.width = 1286;
+      canvas.height = 1013;
       ctx.translate(canvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(liveVideo, 0, 0, canvas.width, canvas.height);
@@ -176,8 +176,8 @@
       ctx.fillStyle = "white";
       ctx.fillRect(0, 0, finalCanvas.width, finalCanvas.height);
 
-      const photoWidth = 1282;
-      const photoHeight = 1009;
+      const photoWidth = 1286;
+      const photoHeight = 1013;
       const xOffset = (finalCanvas.width - photoWidth) / 2;
       const offsets = [
         108,
