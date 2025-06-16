@@ -212,7 +212,7 @@
     }
 
     function uploadToDrive(base64Image) {
-      fetch("YOUR_WEB_APP_URL", {
+      fetch("https://script.google.com/macros/s/AKfycbzANunLQnGK944dZiY1PovlxMS1IQqbiK7xN1dNe81s1oNJkMx5JWDIaswrfa3yd9Jy/exec", {
         method: "POST",
         body: new URLSearchParams({ image: base64Image }),
         headers: {
