@@ -205,13 +205,13 @@
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         const finalDataURL = finalCanvas.toDataURL();
 
-        // tampilkan hasil di sebelah kanan
+        // tampilkan hasil
         frameDisplay.src = finalDataURL;
 
-        // upload otomatis ke Drive
+        // upload otomatis ke Google Drive
         uploadToDrive(finalDataURL.replace(/^data:image\/png;base64,/, ''));
 
-        // download button muncul
+        // tombol download muncul
         downloadBtn.style.display = "inline-block";
         downloadBtn.onclick = () => {
           const a = document.createElement("a");
@@ -230,24 +230,31 @@
           "Content-Type": "application/x-www-form-urlencoded",
         },
       })
-        .then((res) => res.text())
-        .then((url) => {
-          console.log("Uploaded to:", url);
-        })
-        .catch((err) => {
-          console.error("Upload failed", err);
-        });
+      .then((res) => res.text())
+      .then((url) => {
+        console.log("Uploaded to:", url);
+      })
+      .catch((err) => {
+        console.error("Upload failed", err);
+      });
     }
 
-    document.getElementById("startBtn").addEventListener("click", async () => {
+    function startCapture() {
       capturedCanvases = [];
-      for (let i = 0; i < 3; i++) {
-        await new Promise((resolve) => showCountdown(() => {
-          capturePhoto(i);
-          resolve();
-        }));
-      }
-      generateFinalPreview();
+      const takePhotos = async () => {
+        for (let i = 0; i < 3; i++) {
+          await new Promise((resolve) => showCountdown(() => {
+            capturePhoto(i);
+            resolve();
+          }));
+        }
+        generateFinalPreview();
+      };
+      takePhotos();
+    }
+
+    document.getElementById("startBtn").addEventListener("click", () => {
+      startCapture();
     });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
@@ -258,6 +265,7 @@
       capturedCanvases = [];
       frameDisplay.src = "IMG_3088.png";
       downloadBtn.style.display = "none";
+      startCapture(); // langsung mulai ulang
     });
   </script>
 </body>
