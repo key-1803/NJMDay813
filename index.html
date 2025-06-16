@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Photobooth 3-Cut</title>
   <style>
     body {
@@ -90,11 +90,7 @@
       border: 2px solid #333;
       align-self: flex-start;
     }
-    #qrcode {
-      margin-top: 20px;
-    }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div id="leftPanel">
@@ -116,7 +112,6 @@
           <button id="retakeBtn">Retake</button>
           <button id="downloadBtn">Download</button>
         </div>
-        <div id="qrcode"></div>
       </div>
       <img id="frameDisplay" src="IMG_3088.png" />
     </div>
@@ -210,16 +205,23 @@
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         const finalDataURL = finalCanvas.toDataURL();
         frameDisplay.src = finalDataURL;
-
-        // Generate QR Code for download
-        const qrCodeEl = document.getElementById("qrcode");
-        qrCodeEl.innerHTML = "";
-        new QRCode(qrCodeEl, {
-          text: finalDataURL,
-          width: 200,
-          height: 200
-        });
+        uploadToDrive(finalDataURL);
       };
+    }
+
+    async function uploadToDrive(base64Image) {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbxCxbm7RdzNyPJbkqz7ceugHBCVf_0w9zKAf5PhGdqfZCcNjQlbnDqqRGcfnK4U0nQw/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: base64Image })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert("Foto berhasil di-upload ke Google Drive!\nLink: " + result.url);
+      } else {
+        alert("Gagal upload: " + result.error);
+      }
     }
 
     document.getElementById("startBtn").addEventListener("click", async () => {
@@ -237,7 +239,6 @@
       previewImages.forEach(img => img.src = "");
       capturedCanvases = [];
       frameDisplay.src = "IMG_3088.png";
-      document.getElementById("qrcode").innerHTML = "";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
