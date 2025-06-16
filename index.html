@@ -196,7 +196,9 @@
       ];
 
       capturedCanvases.forEach((canvas, i) => {
-        ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
+        if (canvas) {
+          ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
+        }
       });
 
       const frame = new Image();
@@ -208,22 +210,32 @@
       };
     }
 
-    document.getElementById("startBtn").addEventListener("click", async () => {
+    async function startSequence() {
+      // Reset sebelum mulai
       capturedCanvases = [];
+      previewImages.forEach(img => (img.src = ""));
+      ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
+      frameDisplay.src = "IMG_3088.png";
+
       for (let i = 0; i < 3; i++) {
-        await new Promise((resolve) => showCountdown(() => {
-          capturePhoto(i);
-          resolve();
-        }));
+        await new Promise((resolve) => {
+          showCountdown(() => {
+            capturePhoto(i);
+            resolve();
+          });
+        });
       }
+
       generateFinalPreview();
-    });
+    }
+
+    document.getElementById("startBtn").addEventListener("click", startSequence);
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
       previewImages.forEach(img => img.src = "");
       capturedCanvases = [];
-      frameDisplay.src = "IMG_3088.png";
       ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
+      frameDisplay.src = "IMG_3088.png";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
