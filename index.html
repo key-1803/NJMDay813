@@ -196,9 +196,7 @@
       ];
 
       capturedCanvases.forEach((canvas, i) => {
-        if (canvas) {
-          ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
-        }
+        ctx.drawImage(canvas, xOffset, offsets[i], photoWidth, photoHeight);
       });
 
       const frame = new Image();
@@ -210,31 +208,31 @@
       };
     }
 
-    async function startSequence() {
-      // Reset sebelum mulai
+    document.getElementById("startBtn").addEventListener("click", async () => {
       capturedCanvases = [];
-      previewImages.forEach(img => (img.src = ""));
-      ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
-      frameDisplay.src = "IMG_3088.png";
-
       for (let i = 0; i < 3; i++) {
-        await new Promise((resolve) => {
-          showCountdown(() => {
-            capturePhoto(i);
-            resolve();
-          });
-        });
+        await new Promise((resolve) => showCountdown(() => {
+          capturePhoto(i);
+          resolve();
+        }));
       }
-
       generateFinalPreview();
-    }
-
-    document.getElementById("startBtn").addEventListener("click", startSequence);
+    });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
-      previewImages.forEach(img => img.src = "");
+      // Kosongkan preview bawah
+      previewImages.forEach(img => {
+        img.src = "";
+        img.removeAttribute("src");
+      });
+
+      // Kosongkan hasil capture
       capturedCanvases = [];
+
+      // Kosongkan overview
       ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
+
+      // Reset frame preview
       frameDisplay.src = "IMG_3088.png";
     });
 
