@@ -6,13 +6,14 @@
   <title>Photobooth 3-Cut with Drive Upload</title>
   <style>
     body {
+      background: url('bg@4x.png') no-repeat center center fixed;
+      background-size: cover;
       display: flex;
       justify-content: flex-start;
       align-items: flex-start;
       gap: 20px;
       font-family: sans-serif;
       margin: 20px;
-      background: #f0f0f0;
     }
     #leftPanel {
       display: flex;
@@ -108,6 +109,7 @@
         <div id="controls">
           <button id="startBtn">Start</button>
           <button id="retakeBtn">Retake</button>
+          <button id="downloadBtn" style="display: none;">Download</button>
         </div>
       </div>
       <img id="frameDisplay" src="IMG_3088.png" />
@@ -127,6 +129,7 @@
 
     const countdownEl = document.getElementById("countdown");
     const frameDisplay = document.getElementById("frameDisplay");
+    const downloadBtn = document.getElementById("downloadBtn");
     let stream;
     let capturedCanvases = [];
 
@@ -201,8 +204,21 @@
       frame.onload = () => {
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         const finalDataURL = finalCanvas.toDataURL();
+
+        // tampilkan hasil di sebelah kanan
         frameDisplay.src = finalDataURL;
+
+        // upload otomatis ke Drive
         uploadToDrive(finalDataURL.replace(/^data:image\/png;base64,/, ''));
+
+        // download button muncul
+        downloadBtn.style.display = "inline-block";
+        downloadBtn.onclick = () => {
+          const a = document.createElement("a");
+          a.href = finalDataURL;
+          a.download = "photobooth.png";
+          a.click();
+        };
       };
     }
 
@@ -216,7 +232,7 @@
       })
         .then((res) => res.text())
         .then((url) => {
-          console.log("Uploaded to Google Drive:", url);
+          console.log("Uploaded to:", url);
         })
         .catch((err) => {
           console.error("Upload failed", err);
@@ -241,6 +257,7 @@
       });
       capturedCanvases = [];
       frameDisplay.src = "IMG_3088.png";
+      downloadBtn.style.display = "none";
     });
   </script>
 </body>
