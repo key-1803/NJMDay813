@@ -223,6 +223,7 @@
       previewImages.forEach(img => img.src = "");
       capturedCanvases = [];
       frameDisplay.src = "IMG_3088.png";
+      ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
