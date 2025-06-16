@@ -103,9 +103,9 @@
         </div>
         <canvas id="overview"></canvas>
         <div id="photoPreviews">
-          <img id="preview1" width="224" height="166" />
-          <img id="preview2" width="224" height="166" />
-          <img id="preview3" width="224" height="166" />
+          <img id="preview1" width="224" height="166" src="" />
+          <img id="preview2" width="224" height="166" src="" />
+          <img id="preview3" width="224" height="166" src="" />
         </div>
         <div id="controls">
           <button id="startBtn">Start</button>
@@ -220,9 +220,10 @@
     });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
-      // Kosongkan preview bawah
-      previewImages.forEach(img => {
+      // Kosongkan semua preview bawah
+      previewImages.forEach((img, i) => {
         img.removeAttribute("src");
+        img.src = ""; // pastikan kosong benar-benar
       });
 
       // Kosongkan hasil capture
@@ -231,9 +232,8 @@
       // Kosongkan overview
       ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
 
-      // Kosongkan frame display
-      frameDisplay.removeAttribute("src");
-      frameDisplay.src = "IMG_3088.png"; // Atau kosongkan total kalau mau
+      // Reset frame hasil akhir
+      frameDisplay.src = "IMG_3088.png";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
