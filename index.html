@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Photobooth 3-Cut</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Photobooth 3-Cut with Drive Upload</title>
   <style>
     body {
       display: flex;
@@ -12,8 +12,7 @@
       gap: 20px;
       font-family: sans-serif;
       margin: 20px;
-      background: url('bg@4x.png') no-repeat center center fixed;
-      background-size: cover;
+      background: #f0f0f0;
     }
     #leftPanel {
       display: flex;
@@ -47,7 +46,6 @@
       transform: translate(-50%, -50%);
       display: none;
       z-index: 10;
-      pointer-events: none;
     }
     #overview {
       transform: scaleX(-1);
@@ -64,6 +62,7 @@
     }
     #photoPreviews img {
       border: 1px solid #ccc;
+      display: none;
     }
     #controls {
       display: flex;
@@ -88,14 +87,12 @@
       width: 355px;
       height: auto;
       border: 2px solid #333;
-      align-self: flex-start;
     }
-    #qrCode {
+    #qrcode {
       margin-top: 20px;
-      width: 200px;
-      height: 200px;
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div id="leftPanel">
@@ -115,12 +112,11 @@
         <div id="controls">
           <button id="startBtn">Start</button>
           <button id="retakeBtn">Retake</button>
-          <button id="downloadBtn">Download</button>
         </div>
+        <div id="qrcode"></div>
       </div>
       <img id="frameDisplay" src="IMG_3088.png" />
     </div>
-    <img id="qrCode" />
   </div>
 
   <script>
@@ -136,7 +132,6 @@
 
     const countdownEl = document.getElementById("countdown");
     const frameDisplay = document.getElementById("frameDisplay");
-
     let stream;
     let capturedCanvases = [];
 
@@ -181,6 +176,7 @@
       ctxOverview.restore();
 
       previewImages[index].src = canvas.toDataURL();
+      previewImages[index].style.display = "block";
     }
 
     function generateFinalPreview() {
@@ -211,26 +207,36 @@
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         const finalDataURL = finalCanvas.toDataURL();
         frameDisplay.src = finalDataURL;
-
-        // Upload ke Google Apps Script
-        const base64Image = finalDataURL.replace(/^data:image\/png;base64,/, "");
-        fetch("https://script.google.com/macros/s/AKfycbzANunLQnGK944dZiY1PovlxMS1IQqbiK7xN1dNe81s1oNJkMx5JWDIaswrfa3yd9Jy/exec", {
-          method: "POST",
-          body: new URLSearchParams({ image: base64Image })
-        })
-          .then((res) => res.text())
-          .then((url) => {
-            console.log("Uploaded to:", url);
-            generateQRCode(url);
-          })
-          .catch((err) => console.error("Upload error", err));
+        uploadToDrive(finalDataURL.replace(/^data:image\/png;base64,/, ''));
       };
     }
 
+    function uploadToDrive(base64Image) {
+      fetch("YOUR_WEB_APP_URL", {
+        method: "POST",
+        body: new URLSearchParams({ image: base64Image }),
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      })
+        .then((res) => res.text())
+        .then((url) => {
+          console.log("Uploaded:", url);
+          generateQRCode(url);
+        })
+        .catch((err) => {
+          console.error("Upload failed", err);
+        });
+    }
+
     function generateQRCode(url) {
-      const qr = document.getElementById("qrCode");
-      const encoded = encodeURIComponent(url);
-      qr.src = `https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${encoded}`;
+      const qrDiv = document.getElementById("qrcode");
+      qrDiv.innerHTML = "";
+      new QRCode(qrDiv, {
+        text: url,
+        width: 200,
+        height: 200,
+      });
     }
 
     document.getElementById("startBtn").addEventListener("click", async () => {
@@ -245,17 +251,13 @@
     });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
-      previewImages.forEach(img => img.src = "");
+      previewImages.forEach(img => {
+        img.src = "";
+        img.style.display = "none";
+      });
       capturedCanvases = [];
       frameDisplay.src = "IMG_3088.png";
-      document.getElementById("qrCode").src = "";
-    });
-
-    document.getElementById("downloadBtn").addEventListener("click", () => {
-      const link = document.createElement("a");
-      link.download = "photobooth.png";
-      link.href = frameDisplay.src;
-      link.click();
+      document.getElementById("qrcode").innerHTML = "";
     });
   </script>
 </body>
