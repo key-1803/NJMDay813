@@ -64,6 +64,7 @@
     }
     #photoPreviews img {
       border: 1px solid #ccc;
+      display: none; /* Mulai dalam keadaan tersembunyi */
     }
     #controls {
       display: flex;
@@ -103,9 +104,9 @@
         </div>
         <canvas id="overview"></canvas>
         <div id="photoPreviews">
-          <img id="preview1" width="224" height="166" src="" />
-          <img id="preview2" width="224" height="166" src="" />
-          <img id="preview3" width="224" height="166" src="" />
+          <img id="preview1" width="224" height="166" />
+          <img id="preview2" width="224" height="166" />
+          <img id="preview3" width="224" height="166" />
         </div>
         <div id="controls">
           <button id="startBtn">Start</button>
@@ -174,6 +175,8 @@
       ctxOverview.drawImage(liveVideo, 0, 0, 160, 120);
       ctxOverview.restore();
 
+      // Tampilkan preview
+      previewImages[index].style.display = "block";
       previewImages[index].src = canvas.toDataURL();
     }
 
@@ -220,19 +223,16 @@
     });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
-      // Kosongkan semua preview bawah
-      previewImages.forEach((img, i) => {
-        img.removeAttribute("src");
-        img.src = ""; // pastikan kosong benar-benar
+      // Kosongkan preview
+      previewImages.forEach((img) => {
+        img.src = "";
+        img.style.display = "none"; // Sembunyikan image
       });
 
-      // Kosongkan hasil capture
       capturedCanvases = [];
 
-      // Kosongkan overview
       ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
 
-      // Reset frame hasil akhir
       frameDisplay.src = "IMG_3088.png";
     });
 
