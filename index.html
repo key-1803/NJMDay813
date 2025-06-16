@@ -222,7 +222,6 @@
     document.getElementById("retakeBtn").addEventListener("click", () => {
       // Kosongkan preview bawah
       previewImages.forEach(img => {
-        img.src = "";
         img.removeAttribute("src");
       });
 
@@ -232,8 +231,9 @@
       // Kosongkan overview
       ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
 
-      // Reset frame preview
-      frameDisplay.src = "IMG_3088.png";
+      // Kosongkan frame display
+      frameDisplay.removeAttribute("src");
+      frameDisplay.src = "IMG_3088.png"; // Atau kosongkan total kalau mau
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
