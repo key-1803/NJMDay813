@@ -88,11 +88,7 @@
       height: auto;
       border: 2px solid #333;
     }
-    #qrcode {
-      margin-top: 20px;
-    }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div id="leftPanel">
@@ -113,7 +109,6 @@
           <button id="startBtn">Start</button>
           <button id="retakeBtn">Retake</button>
         </div>
-        <div id="qrcode"></div>
       </div>
       <img id="frameDisplay" src="IMG_3088.png" />
     </div>
@@ -221,22 +216,11 @@
       })
         .then((res) => res.text())
         .then((url) => {
-          console.log("Uploaded:", url);
-          generateQRCode(url);
+          console.log("Uploaded to Google Drive:", url);
         })
         .catch((err) => {
           console.error("Upload failed", err);
         });
-    }
-
-    function generateQRCode(url) {
-      const qrDiv = document.getElementById("qrcode");
-      qrDiv.innerHTML = "";
-      new QRCode(qrDiv, {
-        text: url,
-        width: 200,
-        height: 200,
-      });
     }
 
     document.getElementById("startBtn").addEventListener("click", async () => {
@@ -257,7 +241,6 @@
       });
       capturedCanvases = [];
       frameDisplay.src = "IMG_3088.png";
-      document.getElementById("qrcode").innerHTML = "";
     });
   </script>
 </body>
