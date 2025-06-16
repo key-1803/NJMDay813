@@ -64,7 +64,6 @@
     }
     #photoPreviews img {
       border: 1px solid #ccc;
-      display: none; /* Mulai dalam keadaan tersembunyi */
     }
     #controls {
       display: flex;
@@ -91,7 +90,11 @@
       border: 2px solid #333;
       align-self: flex-start;
     }
+    #qrcode {
+      margin-top: 20px;
+    }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
   <div id="leftPanel">
@@ -113,6 +116,7 @@
           <button id="retakeBtn">Retake</button>
           <button id="downloadBtn">Download</button>
         </div>
+        <div id="qrcode"></div>
       </div>
       <img id="frameDisplay" src="IMG_3088.png" />
     </div>
@@ -175,8 +179,6 @@
       ctxOverview.drawImage(liveVideo, 0, 0, 160, 120);
       ctxOverview.restore();
 
-      // Tampilkan preview
-      previewImages[index].style.display = "block";
       previewImages[index].src = canvas.toDataURL();
     }
 
@@ -208,6 +210,15 @@
         ctx.drawImage(frame, 0, 0, finalCanvas.width, finalCanvas.height);
         const finalDataURL = finalCanvas.toDataURL();
         frameDisplay.src = finalDataURL;
+
+        // Generate QR Code for download
+        const qrCodeEl = document.getElementById("qrcode");
+        qrCodeEl.innerHTML = "";
+        new QRCode(qrCodeEl, {
+          text: finalDataURL,
+          width: 200,
+          height: 200
+        });
       };
     }
 
@@ -223,17 +234,10 @@
     });
 
     document.getElementById("retakeBtn").addEventListener("click", () => {
-      // Kosongkan preview
-      previewImages.forEach((img) => {
-        img.src = "";
-        img.style.display = "none"; // Sembunyikan image
-      });
-
+      previewImages.forEach(img => img.src = "");
       capturedCanvases = [];
-
-      ctxOverview.clearRect(0, 0, overviewCanvas.width, overviewCanvas.height);
-
       frameDisplay.src = "IMG_3088.png";
+      document.getElementById("qrcode").innerHTML = "";
     });
 
     document.getElementById("downloadBtn").addEventListener("click", () => {
